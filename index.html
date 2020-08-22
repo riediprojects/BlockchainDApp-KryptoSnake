@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>CryptoSnakes</title>
+
+    <script type="text/javascript" src="./src/js/external/web3.min.js"></script>
+    <script src="src/js/utils.js"></script>
+    <script src="src/js/external/notify.js"></script>
+
+    <script type="text/javascript" src="./src/js/abi/snakeCreatorABI.js"></script>
+    <script type="text/javascript" src="./src/js/abi/SnakeReproductionABI.js"></script>
+    <script type="text/javascript" src="./src/js/abi/snakeOwnershipABI.js"></script>
+    <script type="text/javascript" src="./src/js/abi/snakeMarketABI.js"></script>
+
+    <script type="text/javascript" src="./src/js/snakeCreator.js"></script>
+    <script type="text/javascript" src="./src/js/SnakeReproduction.js"></script>
+    <script type="text/javascript" src="./src/js/snakeMarket.js"></script>
+    <script type="text/javascript" src="./src/js/snakeOwnership.js"></script>
+
+
+
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/snake.css">
+    <link rel="stylesheet" href="css/notify.css">
+
+</head>
+
+<body>
+<div id="backdrop"></div>
+<div id="notify"></div>
+
+<div id="pairingDialog">
+    <h1>Pairing two snake:</h1>
+    <h3><span id="snakeOne"> </span></h3>
+    <h3>&</h3>
+    <h3> <span id="snakeTwo"> </span></h3>
+    <div class="dialog-actions">
+        <button type="button" class="btn-cancel" onclick="closeDialog()">Cancel</button>
+        <button type="button" class="btn-confirm" onclick="pairSnakes(pairingSnakes[0], pairingSnakes[1])"
+                id="pairingConfirm">Confirm
+        </button>
+    </div>
+</div>
+
+<div style="text-align: center; padding-bottom: 30px;">
+    <h1>CryptoSnake</h1>
+    <br>
+    <p>Your User-Account: <span style="font-weight: bold" id="userAccountCode"></span></p>
+</div>
+
+<div class="boxwrapper">
+    <div id="createBox">
+        <h4>Create New Snake</h4>
+        <p>Input the Name of your new Snake.</p>
+        <br>
+        <label for="snakeInputName">Snake Name: </label>
+        <input id="snakeInputName" type="text" name="snakeInputName" class="form-control" placeholder="New Snake name">
+
+        <button id="createSnake" type="button" class="button" onclick="createPayedSnake()">create
+            snake
+        </button>
+        <button id="createInitalSnake" style="display: none" type="button" class="button" onclick="createInitialSnake()">
+            create Inital Snake
+        </button>
+    </div>
+
+    <div id="receiveSnakeBox">
+        <h4>Your received Snakes</h4>
+        <p>Click on Snakes-Name which you wanna receive.</p>
+        <br>
+        <div id="receiveList"></div>
+
+    </div>
+</div>
+
+
+<div id="snakesview">
+    <p style="float: left; text-align:left; width:33.3333%;">
+        Snakes: <span id="snakeamount">0</span>
+    </p>
+
+    <h2 style="float: left; text-align:center; width:33.3333%;">
+        Your Snakes
+    </h2>
+
+    <p style="float: left; text-align:right; width:33.3333%; cursor: pointer " onclick="showAllSnakes()">
+        Refresh list <span style="font-size: 2em">🗘
+     </span>
+    </p>
+
+    <div id="snakes"></div>
+
+</div>
+
+
+<div id="marketview">
+    <p style="float: left; text-align:left; width:33.3333%;">
+        Snakes: <span id="snakesMarketAmount">0</span>
+    </p>
+
+    <h2 style="float: left; text-align:center; width:33.3333%;">
+        Snakes Marketplace
+    </h2>
+
+    <p style="float: left; text-align:right; width:33.3333%; cursor: pointer " onclick="displaySnakesOnMarket()">
+        Refresh list <span style="font-size: 2em">🗘
+     </span>
+    </p>
+
+    <div id="marketplace"></div>
+
+</div>
+
+<script>
+    let cryptoSnakeOwnership;
+    let cryptoSnakeMarket;
+    let userAccount;
+
+    const startApp = () => {
+        const contractSnakeOwnership = "0xf2b0673dB750879843f9CCB218A9Db31860a6eA1";
+        const contractMarket = "0x2AD73B49Edf5BcCA92570e91F520216F666453Eb";
+
+        cryptoSnakeOwnership = new window.web3.eth.Contract(snakeOwnershipABI, contractSnakeOwnership);
+        cryptoSnakeMarket = new window.web3.eth.Contract(snakeMarketABI, contractMarket);
+
+        window.web3.eth.getAccounts((err, res) => {
+            console.log("user account: " + res[0])
+            userAccount = res[0];
+
+            document.getElementById("userAccountCode").innerText = userAccount;
+            startDisplay();
+
+        });
+    }
+
+    const startDisplay = async () => {
+        await showAllSnakes();
+        await displaySnakesOnMarket()
+        await initalSnakeCheck();
+        await createReceiveList();
+
+        cryptoSnakeOwnership.events.NewSnake()
+            .on("data", function(event) {
+                const snake = event.returnValues;
+                console.log("A new Snake!", snake.snakeId, snake.name, snake.dna);
+                fireNotify(`New Snake arrived\n Say welcome to ${snake.name} \n ID:${snake.snakeId}`)
+            }).on("error", console.error);
+
+        cryptoSnakeOwnership.events.Approval()
+            .on("data", function(event) {
+                const approv = event.returnValues;
+                console.log("A new Approval!", approv._owner, approv._approved, approv._tokenId);
+                createReceiveList();
+            }).on("error", console.error);
+
+    }
+
+    window.addEventListener('load', () => {
+        if (window.ethereum) {
+            window.web3 = new Web3(window.ethereum);
+            window.ethereum.enable();
+            console.log("Web3 is found")
+        } else {
+            console.log("Web3 is NOT found !!!")
+        }
+        startApp()
+    })
+
+    const nameInputField= document.getElementById("snakeInputName");
+    const dialog = document.getElementById('pairingDialog');
+    const backdrop = document.getElementById('backdrop');
+</script>
+
+</body>
+</html>
