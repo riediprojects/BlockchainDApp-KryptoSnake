@@ -3,6 +3,8 @@
 ## Idee 
 CryptoSnake ist eine Blockchain-Basierte Web-Applikation, mit welcher auf spielerische Art Schlangen gehalten, erzeugt, gefüttert und auf einem Markt gehandelt oder verschenkt werden können. Die WebApp wurde mit Smart-Contracts für die Ethereum-Blockchain entwickelt.
 
+![paaren](./Frontend.jpg)
+
 ## Technologien
 - Solidity
 - JavaScript
@@ -11,8 +13,6 @@ CryptoSnake ist eine Blockchain-Basierte Web-Applikation, mit welcher auf spiele
 - Blockchain
 - Ethereum
 - Remix
-
-![paaren](./Frontend.jpg)
 
 ## Eigenschaften einer Schlange (CryptoSnake) 
 Jede Schlange besitzt folgende Attribute:
