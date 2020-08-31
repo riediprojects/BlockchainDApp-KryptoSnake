@@ -1,4 +1,4 @@
-# Blockchain DApp: Krypto Snake
+# Blockchain DApp: KryptoSnake
 
 ## Idee 
 CryptoSnake ist eine Blockchain-Basierte Web-Applikation, mit welcher auf spielerische Art Schlangen gehalten, erzeugt, gefüttert und auf einem Markt gehandelt oder verschenkt werden können. Die WebApp wurde mit Smart-Contracts für die Ethereum-Blockchain entwickelt.
