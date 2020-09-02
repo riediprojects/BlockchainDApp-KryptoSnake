@@ -8,6 +8,8 @@ CryptoSnake ist eine Blockchain-Basierte Web-Applikation, mit welcher auf spiele
 ## Technologien
 - Solidity
 - JavaScript
+- web3.js
+- Meta-Mask
 - HTML
 - CSS
 - Blockchain
