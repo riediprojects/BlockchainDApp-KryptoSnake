@@ -15,6 +15,10 @@ CryptoSnake ist eine Blockchain-Basierte Web-Applikation, mit welcher auf spiele
 - Ethereum
 - Remix
 
+## Architektur 
+Die Webapplikation ist unterteilt in ein klassisches Frontend und Backend. Das Frontend wurde mit den klassischen Webtechnologien wie JavaScript, HTML, CSS entwickelt. Im Backend wurde Solidity verwendet, um Smart Contracts zu erstellen, die dann auf der Ethereum Blockchain deployed werden. Um das Backend mit dem Frontend zu verbinden wurde Web3.js benutzt und zusätzlich noch MetaMask als Krypto-Wallet. Im Backend gibt es eine Vererbungsstruktur, um die einzelnen Smart Contracts besser aufzuteilen. Der Snake-Market ist als eigenständiger Contract deployed und ist somit nicht in der
+Vererbungshierarchie.
+
 ## Das Spiel
 ### Eigenschaften einer Schlange (CryptoSnake) 
 Jede Schlange besitzt folgende Attribute:
@@ -47,10 +51,6 @@ an jemanden zu verschenken.
 #### Anreize für das Spiel 
 Durch das Sammeln und Weiterentwickeln der Schlange kann ein höherer Preis am Markt verlangt werden. Ein weiterer Anreiz ist der Besitz einer einzigartigen Schlange, die dem Benutzer farblich oder
 anhand der Eigenschaften besonders gefällt.
-
-## Architektur 
-Die Webapplikation ist unterteilt in ein klassisches Frontend und Backend. Das Frontend wurde mit den klassischen Webtechnologien wie JavaScript, HTML, CSS entwickelt. Im Backend wurde Solidity verwendet, um Smart Contracts zu erstellen, die dann auf der Ethereum Blockchain deployed werden. Um das Backend mit dem Frontend zu verbinden wurde Web3.js benutzt und zusätzlich noch MetaMask als Krypto-Wallet. Im Backend gibt es eine Vererbungsstruktur, um die einzelnen Smart Contracts besser aufzuteilen. Der Snake-Market ist als eigenständiger Contract deployed und ist somit nicht in der
-Vererbungshierarchie.
 
 ## Projekt-Team
 Manuel Riedi, Benjamin Brodwolf, Pascal Andermatt
